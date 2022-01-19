@@ -56,7 +56,7 @@ quantiles.SinImp=q(as.sinImp) ## quantiles in Z=1
 quantiles.Imp=q(as.Imp) ## quantiles in imputed incomes
 
 ### Table 2
-alpha=c(0.05,0.1,0.25,0.5,0.5,0.75,0.9,0.95,0.99)
+alpha=c(0.05,0.1,0.25,0.5,0.75,0.9,0.95,0.99)
 q.sinImp=quantile.f(quantiles.SinImp,alpha=alpha)
 q.Imp=quantile.f(quantiles.Imp,alpha=alpha)
 
@@ -94,21 +94,20 @@ legend(x = "bottomright", pch=16, inset=.01,
                 "Observed income distribution"),
        cex=0.7)
 
-
 # Figure 3
 plot(quantiles.SinImp$x,quantiles.SinImp$proportion,
      xlim=c(0,3000000),
      xlab="Incomes",
      ylab="Cumulative distribution",
      cex=0.5)
-points(quantiles.Imp$x,quantiles.Imp$proportion,
-       col="green",
-       cex=0.5)
 points(quantiles.SinImp$x,quantiles.SinImp$proportion*resp,
        col="blue",
        cex=0.5)
 points(quantiles.SinImp$x,quantiles.SinImp$proportion*resp+(1-resp),
        col="red",
+       cex=0.5)
+points(quantiles.Imp$x,quantiles.Imp$proportion,
+       col="green",
        cex=0.5)
 legend(x = "bottomright", pch=16, inset=.01,
        col= c("red","blue","black","green"), 
@@ -117,7 +116,6 @@ legend(x = "bottomright", pch=16, inset=.01,
                 "Observed income distribution",
                 "Imputed income distribution"),
        cex=0.7)
-
 
 #### Table 4
 alpha=c(0.05,0.10,n.resp,0.25,0.5,0.75,
