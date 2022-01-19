@@ -1,4 +1,6 @@
 # Cumulative distribution function
+options(scipen = 999)
+
 q <- function(a)
 {
   a.sort <- sort(a)  
@@ -12,7 +14,7 @@ q <- function(a)
   return(e_cdf)
 }
 
-# quantile function
+# Quantile function
 quantile.f <-function(data,alpha)
 {
   q.function=lapply(1:length(alpha),
@@ -40,57 +42,116 @@ asalariados=data.casen %>%
 
 ## imputed and non-imputed salaried data
 as.sinImp=na.omit(asalariados$y0101) 
-resp=round(length(as.sinImp)/dim(asalariados)[1],3)
+resp=length(as.sinImp)/dim(asalariados)[1]
 n.resp=1-resp
 
 as.Imp=na.omit(asalariados$y0101c)
 
+#compute quantiles with the q function
+quantiles.SinImp=q(as.sinImp) ## quantiles in Z=1
+quantiles.Imp=q(as.Imp) ## quantiles in imputed incomes
+
+### Table 2
+alpha=c(0.05,0.1,0.25,0.5,0.5,0.75,0.9,0.95,0.99)
+q.sinImp=quantile.f(quantiles.SinImp,alpha=alpha)
+q.Imp=quantile.f(quantiles.Imp,alpha=alpha)
+
+data.frame(alpha,
+           original_quantile=q.sinImp,
+           imputed_quntile=q.Imp)
+
+### incomes avarage in Z=1 and imputed incomes
 mean(as.sinImp)
 mean(as.Imp)
 
-#compute quantiles with the q function
-quantiles.SinImp=q(as.sinImp) ## this is Z=1
-quantiles.Imp=q(as.Imp)
-
-### quantiles table 
-alpha=c(0.05,0.1,0.25,0.5,0.5,0.75,0.9,0.95,0.99)
-quantile.f(quantiles.SinImp,alpha=alpha)
-quantile.f(quantiles.Imp,alpha=alpha)
-
-####### plots
-# P(Y<=y|Z=1,C=1,S=1)
+# Figure 1
 plot(quantiles.SinImp$x,quantiles.SinImp$proportion,
      xlim=c(0,3000000),
      xlab="Incomes",
      ylab="Cumulative distribution",
      cex=0.5)
 
-# Identification region for P(Y<=y|C=1,S=1)
-p=resp
+# Figure 2
 plot(quantiles.SinImp$x,quantiles.SinImp$proportion,
      xlim=c(0,3000000),
      xlab="Incomes",
      ylab="Cumulative distribution",
      cex=0.5)
-points(quantiles.SinImp$x,quantiles.SinImp$proportion*p,
+points(quantiles.SinImp$x,quantiles.SinImp$proportion*resp,
        col="blue",
        cex=0.5)
-points(quantiles.SinImp$x,quantiles.SinImp$proportion*p+(1-p),
+points(quantiles.SinImp$x,quantiles.SinImp$proportion*resp+(1-resp),
        col="red",
        cex=0.5)
-legend(x = "topleft", pch=16, inset=.01,
+legend(x = "bottomright", pch=16, inset=.01,
        col= c("red","blue","black"), 
        legend=c("Lower bound", 
                 "Upper bound",
                 "Observed income distribution"),
        cex=0.7)
 
-#### quantile function
-alpha=quantiles.SinImp$proportion
-alpha.id=seq(n.resp,resp,length=100)
 
-L.alpha=(alpha.id-n.resp)/resp
-U.alpha=alpha.id/resp
+# Figure 3
+plot(quantiles.SinImp$x,quantiles.SinImp$proportion,
+     xlim=c(0,3000000),
+     xlab="Incomes",
+     ylab="Cumulative distribution",
+     cex=0.5)
+points(quantiles.Imp$x,quantiles.Imp$proportion,
+       col="green",
+       cex=0.5)
+points(quantiles.SinImp$x,quantiles.SinImp$proportion*resp,
+       col="blue",
+       cex=0.5)
+points(quantiles.SinImp$x,quantiles.SinImp$proportion*resp+(1-resp),
+       col="red",
+       cex=0.5)
+legend(x = "bottomright", pch=16, inset=.01,
+       col= c("red","blue","black","green"), 
+       legend=c("Lower bound", 
+                "Upper bound",
+                "Observed income distribution",
+                "Imputed income distribution"),
+       cex=0.7)
+
+
+#### Table 4
+alpha=c(0.05,0.10,n.resp,0.25,0.5,0.75,
+        0.8,resp,0.9,0.95,0.99,1)
+
+L.alpha=(alpha-n.resp)/resp
+U.alpha=alpha/resp
+
+L.alpha[which(L.alpha<0)]=0
+U.alpha[which(U.alpha>1)]=1
+
+q.sinImp=quantile.f(quantiles.SinImp,
+                    alpha=alpha)
+
+q.lowerB=quantile.f(quantiles.SinImp,
+                    alpha=L.alpha)
+q.upperB=quantile.f(quantiles.SinImp,
+                    alpha=U.alpha)
+
+
+quantile.f(quantiles.Imp,alpha)
+data.frame(alpha, 
+           LB.q=q.lowerB,
+           UB.q=q.upperB,
+           imputed.q=quantile.f(quantiles.Imp,alpha))
+
+
+
+###################################
+###################################
+
+alpha=quantiles.SinImp$proportion
+
+L.alpha=(alpha-n.resp)/resp
+U.alpha=alpha/resp
+L.alpha[which(q.lowerB<0)]=0
+U.alpha[which(U.alpha>1)]=1
+
 q.sinImp=quantile.f(quantiles.SinImp,
                     alpha=alpha)
 q.lowerB=quantile.f(quantiles.SinImp,
@@ -100,6 +161,6 @@ q.upperB=quantile.f(quantiles.SinImp,
 
 
 plot(alpha,q.sinImp,ylim=c(0,3000000))
-points(alpha.id,q.lowerB,col="red")
-points(alpha.id,q.upperB,col="blue")
+points(alpha,q.lowerB,col="red")
+points(alpha,q.upperB,col="blue")
 
