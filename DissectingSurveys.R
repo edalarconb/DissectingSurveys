@@ -2,6 +2,7 @@
 options(scipen = 999)
 
 q <- function(a)
+# a should be a numeric vector
 {
   a.sort <- sort(a)  
   q.<-c()
