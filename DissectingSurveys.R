@@ -16,6 +16,8 @@ q <- function(a)
 
 # Quantile function
 quantile.f <-function(data,alpha)
+# data must be a data frame as well as the one coming from the q. function
+# alpha could be a number or a vector, which should have numbers between 0 and 1
 {
   q.function=lapply(1:length(alpha),
                     function(a) min(which(data[,2]>=alpha[a])))
