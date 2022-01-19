@@ -1,6 +1,7 @@
-# Cumulative distribution function
+
 options(scipen = 999)
 
+# Cumulative distribution function
 q <- function(a)
 # a should be a numeric vector
 {
