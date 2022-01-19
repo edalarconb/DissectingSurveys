@@ -134,7 +134,6 @@ q.upperB=quantile.f(quantiles.SinImp,
                     alpha=U.alpha)
 
 
-quantile.f(quantiles.Imp,alpha)
 data.frame(alpha, 
            LB.q=q.lowerB,
            UB.q=q.upperB,
@@ -144,23 +143,3 @@ data.frame(alpha,
 
 ###################################
 ###################################
-
-alpha=quantiles.SinImp$proportion
-
-L.alpha=(alpha-n.resp)/resp
-U.alpha=alpha/resp
-L.alpha[which(q.lowerB<0)]=0
-U.alpha[which(U.alpha>1)]=1
-
-q.sinImp=quantile.f(quantiles.SinImp,
-                    alpha=alpha)
-q.lowerB=quantile.f(quantiles.SinImp,
-                    alpha=L.alpha)
-q.upperB=quantile.f(quantiles.SinImp,
-                    alpha=U.alpha)
-
-
-plot(alpha,q.sinImp,ylim=c(0,3000000))
-points(alpha,q.lowerB,col="red")
-points(alpha,q.upperB,col="blue")
-
