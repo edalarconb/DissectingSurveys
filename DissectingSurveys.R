@@ -1,6 +1,13 @@
 
 options(scipen = 999)
 
+
+# libraries to be used
+library(foreign)
+library(dplyr)
+library(haven)
+library(rio)
+
 # Cumulative distribution function
 q <- function(a)
 {
@@ -26,27 +33,13 @@ quantile.f <-function(data,alpha)
   dim.data=dim(data)[2]
   if (data.class!="data.frame" |
       dim.data!=2){'The input data must be a data frame with two columns'}
-else{
-  q.function=lapply(1:length(alpha),
+  else{
+       q.function=lapply(1:length(alpha),
                     function(a) min(which(data[,2]>=alpha[a])))
   positions=unlist(q.function)
   quantile.x=data[positions,][,1]
   return(quantile.x)}
 }
-
-
-x=rnorm(20,10,3)
-dim(q(x))[2]
-a=q(x)
-quantile.f(a,0.4)
-
-
-
-# libraries to be used
-library(foreign)
-library(dplyr)
-library(haven)
-library(rio)
 
 #loading the data
 
