@@ -3,30 +3,44 @@ options(scipen = 999)
 
 # Cumulative distribution function
 q <- function(a)
-# a should be a numeric vector
 {
-  a.sort <- sort(a)  
+  if (class(a)!='numeric'
+    {'The input a must be numeric class'}
+else{
+  a.sort <- sort(a)
   q.<-c()
-  for(i in 1:length(a.sort))
-  {
-    q.[i]=sum(a.sort<=a.sort[i])/length(a.sort)
-  }
+    for(i in 1:length(a.sort))
+      {
+        q.[i]=sum(a.sort<=a.sort[i])/length(a.sort)
+      }
   data.ordered=data.frame(x=a.sort,proportion=q.)
   e_cdf=distinct(data.ordered,x,.keep_all = TRUE)
-  return(e_cdf)
+  return(e_cdf)}
 }
+
 
 # Quantile function
 quantile.f <-function(data,alpha)
-# data must be a data frame as well as the one coming from the q. function
-# alpha could be a number or a vector, which should have numbers between 0 and 1
 {
+  data.class=class(data)
+  dim.data=dim(data)[2]
+  if (data.class!="data.frame" |
+      dim.data!=2){'The input data must be a data frame with two columns'}
+else{
   q.function=lapply(1:length(alpha),
                     function(a) min(which(data[,2]>=alpha[a])))
   positions=unlist(q.function)
   quantile.x=data[positions,][,1]
-  return(quantile.x)
+  return(quantile.x)}
 }
+
+
+x=rnorm(20,10,3)
+dim(q(x))[2]
+a=q(x)
+quantile.f(a,0.4)
+
+
 
 # libraries to be used
 library(foreign)
@@ -35,6 +49,7 @@ library(haven)
 library(rio)
 
 #loading the data
+
 data.casen=read.spss("Casen en Pandemia 2020 SPSS.sav",
                      to.data.frame = TRUE)
 
