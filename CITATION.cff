@@ -4,13 +4,13 @@ title: Dissecting Chilean Surveys R-Code
 message: 'If you use this software, please cite it as below.'
 type: software
 authors:
+  - given-names: Ernesto
+    family-names: San Martín
+    email: esanmart@mat.uc.cl
   - family-names: Alarcón-Bustamante
     email: esalarcon@mat.uc.cl
     orcid: 'https://orcid.org/0000-0003-3121-483X'
     given-names: Eduardo
-  - given-names: Ernesto
-    family-names: San Martín
-    email: esanmart@mat.uc.cl
 url: 'https://github.com/edalarconb/DissectingSurveys'
 version: 1.0.0
 date-released: '2022-01-18'
