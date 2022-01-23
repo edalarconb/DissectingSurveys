@@ -12,7 +12,7 @@ library(rio)
 q <- function(a)
 {
   if (class(a)!='numeric'
-    {'The input a must be numeric class'}
+    {'The input "a" must be numeric class'}
 else{
   a.sort <- sort(a)
   q.<-c()
@@ -32,7 +32,7 @@ quantile.f <-function(data,alpha)
   data.class=class(data)
   dim.data=dim(data)[2]
   if (data.class!="data.frame" |
-      dim.data!=2){'The input data must be a data frame with two columns'}
+      dim.data!=2){'The input "data" must be data.frame class with two columns'}
   else{
        q.function=lapply(1:length(alpha),
                     function(a) min(which(data[,2]>=alpha[a])))
